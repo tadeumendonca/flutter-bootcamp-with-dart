@@ -6,8 +6,7 @@ void main() {
       home: Scaffold(
         body: Center(
           child: Image(
-            image: NetworkImage(
-                'https://media.melhoresdestinos.com.br/2018/07/aurora-boreal-5-820x149.jpg'),
+            image: AssetImage('images/diamond.png'),
           ),
         ),
         backgroundColor: Colors.blueGrey[200],
