@@ -7,7 +7,7 @@ class NetworkHelper {
 
   NetworkHelper({this.url});
 
-  Future<String> getData() async {
+  Future getData() async {
     http.Response responseData = await http.get(url);
     if (responseData.statusCode == 200) {
       String data = responseData.body;
