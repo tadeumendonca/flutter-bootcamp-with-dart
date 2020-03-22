@@ -11,7 +11,9 @@ class PriceScreen extends StatefulWidget {
 class _PriceScreenState extends State<PriceScreen> {
   CoinData coin = CoinData();
   String selectedCurrency = 'USD';
-  String buttonLabel = '1 BTC = ? USD';
+  String buttonLabelBTC = '1 BTC = ? USD';
+  String buttonLabelETH = '1 ETH = ? USD';
+  String buttonLabelLTC = '1 LTC = ? USD';
 
   @override
   void initState() {
@@ -20,11 +22,25 @@ class _PriceScreenState extends State<PriceScreen> {
   }
 
   void updateButtonRate() async {
-    var responseData = await coin.getCoinData('BTC', 'USD');
-    double originalRate = responseData['rate'];
+    var buttonValueBTC = await updateCurrencyRate('BTC', selectedCurrency);
+    var buttonValueETH = await updateCurrencyRate('ETH', selectedCurrency);
+    var buttonValueLTC = await updateCurrencyRate('LTC', selectedCurrency);
+
     setState(() {
-      buttonLabel = '1 BTC = ${originalRate.toInt()} $selectedCurrency';
+      buttonLabelBTC = buttonValueBTC;
+      buttonLabelETH = buttonValueETH;
+      buttonLabelLTC = buttonValueLTC;
     });
+  }
+
+  Future<String> updateCurrencyRate(
+      String originalCurrency, String targetCurrency) async {
+    var responseData =
+        await coin.getCoinData(originalCurrency, '$selectedCurrency');
+    double originalRate = responseData['rate'];
+    String returnValue =
+        '1 $originalCurrency = ${originalRate.toInt()} $selectedCurrency';
+    return returnValue;
   }
 
   CupertinoPicker iOSPicker() {
@@ -82,26 +98,14 @@ class _PriceScreenState extends State<PriceScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
-            child: Card(
-              color: Colors.lightBlueAccent,
-              elevation: 5.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
-                child: Text(
-                  buttonLabel,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              CurrencyCard(buttonLabel: buttonLabelBTC),
+              CurrencyCard(buttonLabel: buttonLabelETH),
+              CurrencyCard(buttonLabel: buttonLabelLTC),
+            ],
           ),
           Container(
             height: 150.0,
@@ -111,6 +115,40 @@ class _PriceScreenState extends State<PriceScreen> {
             child: Platform.isIOS ? iOSPicker() : androidDropdown(),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CurrencyCard extends StatelessWidget {
+  const CurrencyCard({
+    Key key,
+    @required this.buttonLabel,
+  }) : super(key: key);
+
+  final String buttonLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
+      child: Card(
+        color: Colors.lightBlueAccent,
+        elevation: 5.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
+          child: Text(
+            buttonLabel,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20.0,
+              color: Colors.white,
+            ),
+          ),
+        ),
       ),
     );
   }
