@@ -1,3 +1,5 @@
+const apiKey = 'E695634A-980A-4ABB-B8AB-1938593C67CC';
+
 const List<String> currenciesList = [
   'AUD',
   'BRL',
