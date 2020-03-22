@@ -16,14 +16,14 @@ class _PriceScreenState extends State<PriceScreen> {
   @override
   void initState() {
     super.initState();
-    updateRate();
+    updateButtonRate();
   }
 
-  void updateRate() async {
+  void updateButtonRate() async {
     var responseData = await coin.getCoinData('BTC', 'USD');
     double originalRate = responseData['rate'];
     setState(() {
-      buttonLabel = '1 BTC = ${originalRate.toInt()} USD';
+      buttonLabel = '1 BTC = ${originalRate.toInt()} $selectedCurrency';
     });
   }
 
@@ -39,7 +39,10 @@ class _PriceScreenState extends State<PriceScreen> {
       backgroundColor: Colors.lightBlue,
       itemExtent: 32.0,
       onSelectedItemChanged: (selectedIndex) {
-        print(selectedIndex);
+        setState(() {
+          selectedCurrency = currenciesList[selectedIndex];
+          updateButtonRate();
+        });
       },
       children: pickerItems,
     );
@@ -63,6 +66,7 @@ class _PriceScreenState extends State<PriceScreen> {
       onChanged: (value) {
         setState(() {
           selectedCurrency = value;
+          updateButtonRate();
         });
       },
     );
