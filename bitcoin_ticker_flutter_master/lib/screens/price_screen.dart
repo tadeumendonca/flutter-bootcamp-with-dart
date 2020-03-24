@@ -36,7 +36,7 @@ class _PriceScreenState extends State<PriceScreen> {
   Future<String> updateCurrencyRate(
       String originalCurrency, String targetCurrency) async {
     var responseData =
-        await coin.getCoinData(originalCurrency, '$selectedCurrency');
+        await coin.getCoinData(originalCurrency, '$selectedCurrency', context);
     double originalRate = responseData['rate'];
     String returnValue =
         '1 $originalCurrency = ${originalRate.toInt()} $selectedCurrency';
