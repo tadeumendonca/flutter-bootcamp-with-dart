@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bitcoin_ticker/services/coin_data.dart';
+import 'package:bitcoin_ticker/utilities/exceptions.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:io' show Platform;
 
@@ -35,12 +36,17 @@ class _PriceScreenState extends State<PriceScreen> {
 
   Future<String> updateCurrencyRate(
       String originalCurrency, String targetCurrency) async {
-    var responseData =
-        await coin.getCoinData(originalCurrency, '$selectedCurrency', context);
-    double originalRate = responseData['rate'];
-    String returnValue =
-        '1 $originalCurrency = ${originalRate.toInt()} $selectedCurrency';
-    return returnValue;
+    try {
+      var responseData =
+          await coin.getCoinData(originalCurrency, '$selectedCurrency');
+      double originalRate = responseData['rate'];
+      String returnValue =
+          '1 $originalCurrency = ${originalRate.toInt()} $selectedCurrency';
+      return returnValue;
+    } catch (e) {
+      _showDialog(context, 'Update Currency Rate', e.errorMessage());
+      return '1 $originalCurrency = ??? $selectedCurrency';
+    }
   }
 
   CupertinoPicker iOSPicker() {
@@ -88,6 +94,29 @@ class _PriceScreenState extends State<PriceScreen> {
     );
   }
 
+  void _showDialog(BuildContext context, String title, String message) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text(title),
+          content: new Text(message),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,7 +152,7 @@ class _PriceScreenState extends State<PriceScreen> {
 class CurrencyCard extends StatelessWidget {
   const CurrencyCard({
     Key key,
-    @required this.buttonLabel,
+    this.buttonLabel,
   }) : super(key: key);
 
   final String buttonLabel;
