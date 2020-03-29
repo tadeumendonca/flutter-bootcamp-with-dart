@@ -1,5 +1,6 @@
 import 'dart:math';
-
+import 'dart:io' show Platform;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -30,14 +31,6 @@ class _ChatScreenState extends State<ChatScreen> {
       }
     } catch (e) {
       print(e);
-    }
-  }
-
-  void messagesStream() async {
-    await for (var snapshot in _firestore.collection('message').snapshots()) {
-      for (var message in snapshot.documents) {
-        print(message.data);
-      }
     }
   }
 
