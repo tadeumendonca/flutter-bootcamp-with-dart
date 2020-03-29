@@ -86,16 +86,22 @@ class _ChatScreenState extends State<ChatScreen> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     final messages = snapshot.data.documents;
-                    List<Text> messageWidgets = [];
+                    List<Widget> messageWidgets = [];
                     for (var message in messages) {
                       final messageText = message.data['text'];
                       final messageSender = message.data['sender'];
-                      final messageWidget =
-                          Text('$messageText from $messageSender');
+                      final messageWidget = new MessageBubble(
+                        text: messageText,
+                        sender: messageSender,
+                      );
                       messageWidgets.add(messageWidget);
                     }
-                    return Column(
-                      children: messageWidgets,
+                    return Expanded(
+                      child: ListView(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 20.0),
+                        children: messageWidgets,
+                      ),
                     );
                   } else {
                     return Center(
@@ -143,6 +149,44 @@ class _ChatScreenState extends State<ChatScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class MessageBubble extends StatelessWidget {
+  final String sender;
+  final String text;
+
+  MessageBubble({this.sender, this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          Text(
+            sender,
+            style: TextStyle(fontSize: 12.0, color: Colors.black54),
+          ),
+          Material(
+            borderRadius: BorderRadius.circular(30.0),
+            elevation: 5.0,
+            color: Colors.lightBlueAccent,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              child: Text(
+                '$text',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15.0,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
