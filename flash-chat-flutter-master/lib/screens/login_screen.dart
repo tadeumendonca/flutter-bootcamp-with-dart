@@ -111,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.pushNamed(context, ChatScreen.id);
                     }
                   } catch (e) {
-                    showAppDialog(context, 'Login Error', e.toString());
+                    showAppDialog(context, 'Login Error', e.message);
                   } finally {
                     setState(() {
                       showSpinner = false;

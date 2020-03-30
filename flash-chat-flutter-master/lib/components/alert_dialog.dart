@@ -2,12 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 
-CupertinoAlertDialog showIOSDialog(String title, String message) {
+CupertinoAlertDialog showIOSDialog(
+    BuildContext context, String title, String message) {
   return CupertinoAlertDialog(
     title: Text(title),
     content: Text(message),
     actions: [
-      CupertinoDialogAction(isDefaultAction: true, child: new Text("Close")),
+      CupertinoDialogAction(
+        isDefaultAction: true,
+        child: new Text("Close"),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
     ],
   );
 }
@@ -33,7 +40,7 @@ void showAppDialog(BuildContext context, String title, String message) {
   showDialog(
     context: context,
     builder: (BuildContext context) => Platform.isIOS
-        ? showIOSDialog(title, message)
+        ? showIOSDialog(context, title, message)
         : showAndroidDialog(context, title, message),
   );
 }

@@ -86,7 +86,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       showSpinner = false;
                     });
                   } catch (e) {
-                    showAppDialog(context, 'Registration Error', e.toString());
+                    showAppDialog(context, 'Registration Error', e.message);
                   } finally {
                     setState(() {
                       showSpinner = false;
