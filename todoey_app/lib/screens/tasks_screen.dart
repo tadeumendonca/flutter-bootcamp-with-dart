@@ -3,7 +3,12 @@ import 'package:todoeyapp/widgets/tasks_list.dart';
 import 'package:todoeyapp/screens/add_task_screen.dart';
 import 'package:todoeyapp/models/task.dart';
 
-class TasksScreen extends StatelessWidget {
+class TasksScreen extends StatefulWidget {
+  @override
+  _TasksScreenState createState() => _TasksScreenState();
+}
+
+class _TasksScreenState extends State<TasksScreen> {
   final List<Task> tasks = [
     Task(name: 'Buy milk'),
     Task(name: 'Buy eggs'),
@@ -16,7 +21,13 @@ class TasksScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
-              context: context, builder: (context) => AddTaskScreen());
+              context: context,
+              builder: (context) => AddTaskScreen(callback: (newTextTitle) {
+                    setState(() {
+                      tasks.add(Task(name: newTextTitle));
+                    });
+                    Navigator.pop(context);
+                  }));
         },
         backgroundColor: Colors.lightBlueAccent,
         child: Icon(Icons.add),
@@ -51,7 +62,7 @@ class TasksScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '12 Tasks',
+                  '${tasks.length} Tasks',
                   style: TextStyle(color: Colors.white, fontSize: 18.0),
                 ),
               ],
