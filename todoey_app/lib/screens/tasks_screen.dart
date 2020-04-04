@@ -2,18 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:todoeyapp/widgets/tasks_list.dart';
 import 'package:todoeyapp/screens/add_task_screen.dart';
 import 'package:todoeyapp/models/task.dart';
+import 'package:provider/provider.dart';
+import 'package:todoeyapp/models/task_data.dart';
 
-class TasksScreen extends StatefulWidget {
-  @override
-  _TasksScreenState createState() => _TasksScreenState();
-}
-
-class _TasksScreenState extends State<TasksScreen> {
-  final List<Task> tasks = [
-    Task(name: 'Buy milk'),
-    Task(name: 'Buy eggs'),
-  ];
-
+class TasksScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,9 +15,9 @@ class _TasksScreenState extends State<TasksScreen> {
           showModalBottomSheet(
               context: context,
               builder: (context) => AddTaskScreen(callback: (newTextTitle) {
-                    setState(() {
-                      tasks.add(Task(name: newTextTitle));
-                    });
+//                    setState(() {
+//                      tasks.add(Task(name: newTextTitle));
+//                    });
                     Navigator.pop(context);
                   }));
         },
@@ -62,7 +54,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   ),
                 ),
                 Text(
-                  '${tasks.length} Tasks',
+                  '${Provider.of<TaskData>(context).taskCount} Tasks',
                   style: TextStyle(color: Colors.white, fontSize: 18.0),
                 ),
               ],
@@ -72,9 +64,7 @@ class _TasksScreenState extends State<TasksScreen> {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 20.0),
               height: 300.0,
-              child: TasksList(
-                tasks: tasks,
-              ),
+              child: TasksList(),
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
