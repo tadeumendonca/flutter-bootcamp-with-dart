@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todoeyapp/widgets/tasks_list.dart';
 import 'package:todoeyapp/screens/add_task_screen.dart';
-import 'package:todoeyapp/models/task.dart';
 import 'package:provider/provider.dart';
 import 'package:todoeyapp/models/task_data.dart';
 
@@ -13,13 +12,7 @@ class TasksScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
-              context: context,
-              builder: (context) => AddTaskScreen(callback: (newTextTitle) {
-//                    setState(() {
-//                      tasks.add(Task(name: newTextTitle));
-//                    });
-                    Navigator.pop(context);
-                  }));
+              context: context, builder: (context) => AddTaskScreen());
         },
         backgroundColor: Colors.lightBlueAccent,
         child: Icon(Icons.add),
